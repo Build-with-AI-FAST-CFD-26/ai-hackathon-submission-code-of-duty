@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user data and roles",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "founder", "viewer"] },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Integration": {
+      "title": "Tool Integration",
+      "description": "Configuration for external tool integrations",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["Slack", "Jira", "GoogleWorkspace"] },
+        "status": { "type": "string", "enum": ["connected", "disconnected", "error"] },
+        "lastSync": { "type": "string", "format": "date-time" },
+        "config": { "type": "object" }
+      }
+    },
+    "Notification": {
+      "title": "System Notification",
+      "description": "Real-time alerts and notifications",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "category": { "type": "string", "enum": ["Lead", "Deadline", "AI", "Decision", "Meeting"] },
+        "priority": { "type": "string", "enum": ["URGENT", "THIS-WEEK", "IGNORE"] },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "Record of critical events and changes",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "action": { "type": "string" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Lead": {
+      "title": "Lead Tracking",
+      "description": "Management of sales leads",
+      "type": "object",
+      "properties": {
+        "company": { "type": "string" },
+        "contactName": { "type": "string" },
+        "status": { "type": "string" },
+        "lastTouch": { "type": "string", "format": "date-time" },
+        "nextFollowUp": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles and settings"
+    },
+    "/users/{userId}/integrations/{integrationId}": {
+      "schema": "Integration",
+      "description": "Active integrations for a user"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Global or user-specific notifications"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "System audit logs"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Lead management"
+    }
+  }
+}
